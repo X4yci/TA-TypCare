@@ -1,0 +1,1 @@
+@include('welcome', ['authTab' => 'register'])
