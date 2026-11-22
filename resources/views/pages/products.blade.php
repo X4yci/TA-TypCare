@@ -31,17 +31,36 @@
     </script>
 
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+        html, body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #faf8f4;
             color: #1e1e1c;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            overflow-x: hidden;
         }
         .font-display {
             font-family: 'Playfair Display', Georgia, serif;
         }
+        /* Custom horizontal scrollbar for product carousel */
+        #products-grid::-webkit-scrollbar {
+            height: 6px;
+        }
+        #products-grid::-webkit-scrollbar-track {
+            background: #efeae0;
+            border-radius: 9999px;
+        }
+        #products-grid::-webkit-scrollbar-thumb {
+            background: #2b6346;
+            border-radius: 9999px;
+        }
+        #products-grid::-webkit-scrollbar-thumb:hover {
+            background: #1f4833;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-[#faf8f4] text-[#1e1e1c] antialiased selection:bg-[#2b6346] selection:text-white">
+<body class="min-h-dvh flex flex-col bg-[#faf8f4] text-[#1e1e1c] antialiased selection:bg-[#2b6346] selection:text-white">
 
     @php
         $currentUser = session('auth_user');
@@ -56,6 +75,8 @@
                 'category' => 'Daily Detox',
                 'volume' => '250 ml',
                 'price' => 'Rp 15.000',
+                'image' => '2.jpeg',
+                'position' => 'object-[48%_42%]',
             ],
             [
                 'name_line_1' => 'Beras Kencur',
@@ -64,6 +85,8 @@
                 'category' => 'Stamina',
                 'volume' => '250 ml',
                 'price' => 'Rp 16.000',
+                'image' => '3.jpeg',
+                'position' => 'object-[66%_70%]',
             ],
             [
                 'name_line_1' => 'Temulawak',
@@ -72,36 +95,60 @@
                 'category' => 'Immunity Boots',
                 'volume' => '500 ml',
                 'price' => 'Rp 25.000',
+                'image' => '1.jpeg',
+                'position' => 'object-[47%_66%]',
             ],
             [
-                'name_line_1' => 'Red Ginger Shot',
-                'name_line_2' => null,
+                'name_line_1' => 'Kunyit Asam',
+                'name_line_2' => 'Sirih',
                 'benefit' => 'Hangat Tubuh & Metabolisme',
-                'category' => 'Immunity Boots',
+                'category' => 'Daily Detox',
                 'volume' => '250 ml',
                 'price' => 'Rp 18.000',
+                'image' => '6.jpeg',
+                'position' => 'object-[36%_53%]',
+            ],
+            [
+                'name_line_1' => 'Jeruk Nipis',
+                'name_line_2' => 'Gula Batu',
+                'benefit' => 'Kesegaran Tenggorokan & Vitamin C',
+                'category' => 'Immunity Boots',
+                'volume' => '250 ml',
+                'price' => 'Rp 15.000',
+                'image' => '4.jpeg',
+                'position' => 'object-[48%_52%]',
+            ],
+            [
+                'name_line_1' => 'Kunyit Asam Sirih',
+                'name_line_2' => 'Pinang Manjakani',
+                'benefit' => 'Perawatan Alami & Vitalitas',
+                'category' => 'Stamina',
+                'volume' => '250 ml',
+                'price' => 'Rp 20.000',
+                'image' => '5.jpeg',
+                'position' => 'object-[36%_53%]',
             ],
         ];
     @endphp
 
-    <!-- Main Page Container -->
-    <div class="flex-1 w-full max-w-[1260px] mx-auto px-5 sm:px-8 lg:px-10 pt-5 pb-6 flex flex-col justify-between">
+    <!-- Main Page Container (Fits all Windows & Mac desktop viewports cleanly) -->
+    <div class="flex-1 w-full max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-10 py-4 xl:py-5 flex flex-col justify-between">
         <div>
             <!-- Floating Pill Header Navbar -->
-            <header class="w-full bg-white rounded-full border border-[#ebe6dc] px-6 sm:px-8 py-3 flex items-center justify-between shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+            <header class="w-full bg-white rounded-full border border-[#ebe6dc] px-6 sm:px-8 py-2.5 xl:py-3 flex items-center justify-between shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
                 <!-- Left: Logo from public/image/image.png -->
                 <a href="{{ route('home') }}" class="inline-flex items-center focus:outline-none">
                     <img
                         src="{{ asset('image/image.png') }}"
                         alt="TYP Herbal Drink"
-                        class="h-10 sm:h-12 w-auto object-contain mix-blend-multiply -ml-1"
+                        class="h-10 sm:h-11 xl:h-12 w-auto object-contain mix-blend-multiply -ml-1"
                     >
                 </a>
 
                 <!-- Center: Navigation Links -->
                 <nav class="hidden md:flex items-center gap-1 lg:gap-3 text-xs">
                     <a
-                        href="{{ route('home') }}"
+                        href="{{ route('introduction') }}"
                         class="text-[#5c5953] hover:text-[#1e1e1c] font-medium px-4 py-2 rounded-full transition"
                     >
                         Introduction
@@ -154,7 +201,7 @@
             </header>
 
             <!-- Back Link -->
-            <div class="mt-6 px-1">
+            <div class="mt-4 xl:mt-5 px-1">
                 <a
                     href="{{ route('beranda') }}"
                     class="inline-flex items-center gap-2 text-xs font-bold text-[#2b6346] hover:text-[#1e4631] transition"
@@ -167,30 +214,55 @@
                 </a>
             </div>
 
-            <!-- Page Heading & Count -->
-            <div class="mt-5 px-1">
+            <!-- Page Heading, Count & Horizontal Slide Controls -->
+            <div class="mt-3.5 xl:mt-4 px-1">
                 <p class="text-[10.5px] font-bold uppercase tracking-[0.06em] text-[#24583c]">
                     RIMPANG PILIHAN. RACIKAN JUJUR.
                 </p>
-                <h1 class="font-display text-3xl sm:text-[42px] font-bold text-[#1e1e1c] tracking-tight leading-tight mt-1.5">
+                <h1 class="font-display text-3xl sm:text-[36px] xl:text-[40px] font-bold text-[#1e1e1c] tracking-tight leading-tight mt-1">
                     Koleksi Produk TYP Herbal
                 </h1>
-                <div class="mt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <p class="text-xs sm:text-[13.5px] text-[#7c766d]">
+                <div class="mt-1.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <p class="text-xs sm:text-[13px] text-[#7c766d]">
                         Temukan kebaikan yang paling dekat dengan kebutuhan harianmu.
                     </p>
-                    <p class="text-xs text-[#8c867c]">
-                        <span id="racikan-count" class="font-semibold text-[#5c5852]">4 racikan</span> alami tersedia
-                    </p>
+                    <div class="flex items-center gap-3">
+                        <p class="text-xs text-[#8c867c]">
+                            <span id="racikan-count" class="font-semibold text-[#5c5852]">{{ count($products) }} racikan</span> alami tersedia
+                        </p>
+                        <!-- Slide Left / Right Buttons -->
+                        <div class="flex items-center gap-1.5">
+                            <button
+                                type="button"
+                                onclick="slideProducts(-1)"
+                                aria-label="Geser ke kanan"
+                                class="w-7 h-7 rounded-full bg-white border border-[#ded8cc] hover:border-[#2b6346] hover:bg-[#2b6346] hover:text-white text-[#3b3935] flex items-center justify-center transition cursor-pointer shadow-2xs"
+                            >
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <button
+                                type="button"
+                                onclick="slideProducts(1)"
+                                aria-label="Geser ke kiri"
+                                class="w-7 h-7 rounded-full bg-white border border-[#ded8cc] hover:border-[#2b6346] hover:bg-[#2b6346] hover:text-white text-[#3b3935] flex items-center justify-center transition cursor-pointer shadow-2xs"
+                            >
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Main Content Area: Sidebar Filter + 4 Product Cards -->
-            <div class="mt-6 flex flex-col lg:flex-row gap-6 items-start">
+            <!-- Main Content Area: Sidebar Filter + Horizontally Slidable Product Cards -->
+            <div class="mt-5 flex flex-col lg:flex-row gap-5 xl:gap-6 items-start">
                 <!-- Left Filter & Info Sidebar -->
-                <aside class="w-full lg:w-[215px] shrink-0">
+                <aside class="w-full lg:w-[210px] shrink-0">
                     <!-- Filter Title -->
-                    <div class="flex items-center gap-2 text-xs font-bold text-[#1e1e1c] mb-3 px-1">
+                    <div class="flex items-center gap-2 text-xs font-bold text-[#1e1e1c] mb-2.5 px-1">
                         <svg class="w-3.5 h-3.5 text-[#24583c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="4" y1="21" x2="4" y2="14"></line>
                             <line x1="4" y1="10" x2="4" y2="3"></line>
@@ -211,7 +283,7 @@
                             type="button"
                             data-filter="all"
                             onclick="filterProducts('all')"
-                            class="benefit-filter-btn w-full bg-[#2b6346] text-white font-semibold text-xs px-4 py-3 rounded-xl flex items-center justify-between transition cursor-pointer"
+                            class="benefit-filter-btn w-full bg-[#2b6346] text-white font-semibold text-xs px-4 py-2.5 rounded-xl flex items-center justify-between transition cursor-pointer"
                         >
                             <span>Semua</span>
                             <svg class="filter-check w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
@@ -223,7 +295,7 @@
                             type="button"
                             data-filter="Daily Detox"
                             onclick="filterProducts('Daily Detox')"
-                            class="benefit-filter-btn w-full text-left text-[#5c5852] hover:bg-[#efeae0] hover:text-[#1e1e1c] font-medium text-xs px-4 py-3 rounded-xl flex items-center justify-between transition cursor-pointer"
+                            class="benefit-filter-btn w-full text-left text-[#5c5852] hover:bg-[#efeae0] hover:text-[#1e1e1c] font-medium text-xs px-4 py-2.5 rounded-xl flex items-center justify-between transition cursor-pointer"
                         >
                             <span>Daily Detox</span>
                             <svg class="filter-check w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
@@ -235,7 +307,7 @@
                             type="button"
                             data-filter="Immunity Boots"
                             onclick="filterProducts('Immunity Boots')"
-                            class="benefit-filter-btn w-full text-left text-[#5c5852] hover:bg-[#efeae0] hover:text-[#1e1e1c] font-medium text-xs px-4 py-3 rounded-xl flex items-center justify-between transition cursor-pointer"
+                            class="benefit-filter-btn w-full text-left text-[#5c5852] hover:bg-[#efeae0] hover:text-[#1e1e1c] font-medium text-xs px-4 py-2.5 rounded-xl flex items-center justify-between transition cursor-pointer"
                         >
                             <span>Immunity Boots</span>
                             <svg class="filter-check w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
@@ -247,7 +319,7 @@
                             type="button"
                             data-filter="Stamina"
                             onclick="filterProducts('Stamina')"
-                            class="benefit-filter-btn w-full text-left text-[#5c5852] hover:bg-[#efeae0] hover:text-[#1e1e1c] font-medium text-xs px-4 py-3 rounded-xl flex items-center justify-between transition cursor-pointer"
+                            class="benefit-filter-btn w-full text-left text-[#5c5852] hover:bg-[#efeae0] hover:text-[#1e1e1c] font-medium text-xs px-4 py-2.5 rounded-xl flex items-center justify-between transition cursor-pointer"
                         >
                             <span>Stamina</span>
                             <svg class="filter-check w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
@@ -257,11 +329,11 @@
                     </div>
 
                     <!-- Divider -->
-                    <div class="border-t border-[#e8e2d7] my-5"></div>
+                    <div class="border-t border-[#e8e2d7] my-4"></div>
 
                     <!-- Cold Storage Info Box -->
                     <div class="bg-[#e7efe9] border border-[#dce6df] rounded-2xl p-4">
-                        <div class="text-[#2b6346] mb-2.5">
+                        <div class="text-[#2b6346] mb-2">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="2" y1="12" x2="22" y2="12"></line>
                                 <line x1="12" y1="2" x2="12" y2="22"></line>
@@ -271,68 +343,80 @@
                                 <path d="m8 20 4-4 4 4"></path>
                             </svg>
                         </div>
-                        <h3 class="font-display text-[17px] font-bold text-[#24583c] leading-snug">
+                        <h3 class="font-display text-[16.5px] font-bold text-[#24583c] leading-snug">
                             Segar, bukan<br>serba instan.
                         </h3>
-                        <p class="text-[11px] text-[#6d7c72] leading-relaxed mt-2">
+                        <p class="text-[11px] text-[#6d7c72] leading-relaxed mt-1.5">
                             Simpan dingin pada 4&deg;C. Kenali kesegaran racikan lewat catatan batch TYP.
                         </p>
                     </div>
                 </aside>
 
-                <!-- Right Product Cards Grid -->
-                <div id="products-grid" class="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                    @foreach ($products as $product)
-                        <article
-                            data-category="{{ $product['category'] }}"
-                            class="product-card bg-white rounded-[20px] border border-[#ebe6dc] overflow-hidden flex flex-col justify-between shadow-[0_1px_4px_rgba(0,0,0,0.02)] hover:border-[#d5cfc2] transition"
-                        >
-                            <!-- Top Media Slot (Empty image area + Volume Badge at top-right) -->
-                            <div class="relative h-[245px] w-full bg-[#f5f0e6]/60">
-                                <span class="absolute top-3.5 right-3.5 bg-white text-[#2c2a27] text-[10.5px] font-bold px-3 py-1 rounded-full shadow-xs">
-                                    {{ $product['volume'] }}
-                                </span>
-                            </div>
-
-                            <!-- Bottom Card Details -->
-                            <div class="p-5 flex-1 flex flex-col justify-between">
-                                <div>
-                                    <h2 class="font-display text-[21px] font-bold text-[#1e1e1c] leading-[1.22] min-h-[52px]">
-                                        {{ $product['name_line_1'] }}
-                                        @if ($product['name_line_2'])
-                                            <br>{{ $product['name_line_2'] }}
-                                        @endif
-                                    </h2>
-                                    <p class="text-[11.5px] text-[#8c867c] mt-2">
-                                        {{ $product['benefit'] }}
-                                    </p>
-                                </div>
-
-                                <div class="mt-5">
-                                    <p class="text-[15px] font-bold text-[#24583c]">
-                                        {{ $product['price'] }}
-                                    </p>
-
-                                    <a
-                                        href="#detail-produk"
-                                        class="mt-3.5 w-full rounded-full border border-[#3b694f] text-[#1e3a2a] hover:bg-[#2b6346] hover:text-white text-xs font-semibold py-2.5 px-4 inline-flex items-center justify-center gap-2 transition"
+                <!-- Right Product Cards Horizontal Carousel (Slides smoothly with Mouse Scroll Wheel) -->
+                <div class="flex-1 min-w-0 w-full">
+                    <div
+                        id="products-grid"
+                        class="flex gap-4 overflow-x-auto pb-3"
+                    >
+                        @foreach ($products as $product)
+                            <article
+                                data-category="{{ $product['category'] }}"
+                                class="product-card shrink-0 w-[235px] sm:w-[242px] lg:w-[calc((100%-3rem)/4)] lg:min-w-[228px] bg-white rounded-[20px] border border-[#ebe6dc] overflow-hidden flex flex-col justify-between shadow-[0_1px_4px_rgba(0,0,0,0.02)] hover:border-[#d5cfc2] transition"
+                            >
+                                <!-- Top Media Slot with Product Image & Volume Badge -->
+                                <div class="relative h-[215px] xl:h-[235px] w-full bg-[#f5f0e6] overflow-hidden">
+                                    <img
+                                        src="{{ asset('image/' . $product['image']) }}"
+                                        alt="{{ $product['name_line_1'] }} {{ $product['name_line_2'] }}"
+                                        draggable="false"
+                                        class="w-full h-full object-cover {{ $product['position'] }}"
                                     >
-                                        <span>Lihat Isi Produk</span>
-                                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-                                            <line x1="7" y1="17" x2="17" y2="7"></line>
-                                            <polyline points="7 7 17 7 17 17"></polyline>
-                                        </svg>
-                                    </a>
+                                    <span class="absolute top-3.5 right-3.5 z-10 bg-white text-[#2c2a27] text-[10.5px] font-bold px-3 py-1 rounded-full shadow-xs">
+                                        {{ $product['volume'] }}
+                                    </span>
                                 </div>
-                            </div>
-                        </article>
-                    @endforeach
+
+                                <!-- Bottom Card Details -->
+                                <div class="p-4 xl:p-5 flex-1 flex flex-col justify-between">
+                                    <div>
+                                        <h2 class="font-display text-[18.5px] xl:text-[20px] font-bold text-[#1e1e1c] leading-[1.22] min-h-[48px]">
+                                            {{ $product['name_line_1'] }}
+                                            @if ($product['name_line_2'])
+                                                <br>{{ $product['name_line_2'] }}
+                                            @endif
+                                        </h2>
+                                        <p class="text-[11.5px] text-[#8c867c] mt-1.5">
+                                            {{ $product['benefit'] }}
+                                        </p>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <p class="text-[15px] font-bold text-[#24583c]">
+                                            {{ $product['price'] }}
+                                        </p>
+
+                                        <a
+                                            href="#detail-produk"
+                                            draggable="false"
+                                            class="mt-3 w-full rounded-full border border-[#3b694f] text-[#1e3a2a] hover:bg-[#2b6346] hover:text-white text-xs font-semibold py-2.5 px-4 inline-flex items-center justify-center gap-2 transition"
+                                        >
+                                            <span>Lihat Isi Produk</span>
+                                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                                                <line x1="7" y1="17" x2="17" y2="7"></line>
+                                                <polyline points="7 7 17 7 17 17"></polyline>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Bottom Footer -->
-        <footer class="mt-14 pt-4 border-t border-[#e8e2d7] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px]">
+        <footer class="mt-6 xl:mt-8 pt-3.5 border-t border-[#e8e2d7] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px]">
             <div class="text-[#8c867c]">&copy; 2026 TYP Herbal Drink</div>
             <div class="text-[#8c867c]">Setiap racikan memiliki komposisi dan karakter tersendiri.</div>
             <div class="font-bold uppercase tracking-[0.05em] text-[#24583c]">BERAKAR DI INDONESIA</div>
@@ -340,6 +424,36 @@
     </div>
 
     <script>
+        function slideProducts(direction) {
+            const slider = document.getElementById('products-grid');
+            if (!slider) return;
+            const firstCard = slider.querySelector('.product-card:not(.hidden)');
+            const scrollAmount = firstCard ? (firstCard.offsetWidth + 16) : 260;
+            slider.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+
+        // Geser menyamping langsung menggunakan Scroll Wheel pada Mouse (tanpa perlu klik kiri & tahan)
+        document.addEventListener('DOMContentLoaded', function () {
+            const slider = document.getElementById('products-grid');
+            if (!slider) return;
+
+            slider.addEventListener('wheel', function (e) {
+                if (slider.scrollWidth <= slider.clientWidth) return;
+
+                const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+                if (delta === 0) return;
+
+                e.preventDefault();
+                slider.scrollBy({
+                    left: delta * 1.6,
+                    behavior: 'smooth'
+                });
+            }, { passive: false });
+        });
+
         function filterProducts(category) {
             const buttons = document.querySelectorAll('.benefit-filter-btn');
             const cards = document.querySelectorAll('.product-card');
@@ -350,10 +464,10 @@
                 const checkIcon = btn.querySelector('.filter-check');
 
                 if (isMatch) {
-                    btn.className = 'benefit-filter-btn w-full bg-[#2b6346] text-white font-semibold text-xs px-4 py-3 rounded-xl flex items-center justify-between transition cursor-pointer';
+                    btn.className = 'benefit-filter-btn w-full bg-[#2b6346] text-white font-semibold text-xs px-4 py-2.5 rounded-xl flex items-center justify-between transition cursor-pointer';
                     if (checkIcon) checkIcon.classList.remove('hidden');
                 } else {
-                    btn.className = 'benefit-filter-btn w-full text-left text-[#5c5852] hover:bg-[#efeae0] hover:text-[#1e1e1c] font-medium text-xs px-4 py-3 rounded-xl flex items-center justify-between transition cursor-pointer';
+                    btn.className = 'benefit-filter-btn w-full text-left text-[#5c5852] hover:bg-[#efeae0] hover:text-[#1e1e1c] font-medium text-xs px-4 py-2.5 rounded-xl flex items-center justify-between transition cursor-pointer';
                     if (checkIcon) checkIcon.classList.add('hidden');
                 }
             });
@@ -369,6 +483,11 @@
                     card.classList.remove('flex');
                 }
             });
+
+            const slider = document.getElementById('products-grid');
+            if (slider) {
+                slider.scrollTo({ left: 0, behavior: 'smooth' });
+            }
 
             const countEl = document.getElementById('racikan-count');
             if (countEl) {

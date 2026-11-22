@@ -31,17 +31,21 @@
     </script>
 
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+        html, body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f7f4ee;
             color: #1c2820;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            overflow-x: hidden;
         }
         .font-display {
             font-family: 'Playfair Display', Georgia, serif;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-[#f7f4ee] antialiased selection:bg-[#2b6346] selection:text-white">
+<body class="min-h-dvh flex flex-col bg-[#f7f4ee] antialiased selection:bg-[#2b6346] selection:text-white">
 
     @php
         $currentUser = session('auth_user');
@@ -49,7 +53,7 @@
 
     <!-- Notification Banner for General User / Flash Notice -->
     @if (session('user_notice'))
-        <div class="bg-[#fdf3e7] border-b border-[#f2d2b1] px-6 sm:px-10 lg:px-12 py-2.5 flex items-center justify-between gap-4 text-xs text-[#7c5e45]">
+        <div class="bg-[#fdf3e7] border-b border-[#f2d2b1] px-6 sm:px-10 lg:px-12 py-2 flex items-center justify-between gap-4 text-xs text-[#7c5e45]">
             <div class="flex items-center gap-2">
                 <span class="inline-block w-2 h-2 rounded-full bg-[#d86b43]"></span>
                 <span class="font-medium">{{ session('user_notice') }}</span>
@@ -59,13 +63,13 @@
     @endif
 
     <!-- Top Header / Navbar -->
-    <header class="w-full bg-[#f7f4ee] px-6 sm:px-10 lg:px-12 h-20 flex items-center justify-between border-b border-[#e8e2d7]">
+    <header class="w-full bg-[#f7f4ee] px-6 sm:px-10 lg:px-12 h-16 xl:h-[74px] shrink-0 flex items-center justify-between border-b border-[#e8e2d7]">
         <!-- Left: Brand Logo from public/image/image.png -->
         <a href="{{ url('/') }}" class="inline-flex items-center focus:outline-none">
             <img
                 src="{{ asset('image/image.png') }}"
                 alt="TYP Herbal Drink"
-                class="h-12 sm:h-14 w-auto object-contain mix-blend-multiply -ml-2"
+                class="h-15 sm:h-16 xl:h-18 w-auto object-contain mix-blend-multiply -ml-2"
             >
         </a>
 
@@ -87,7 +91,7 @@
                 @if (($currentUser['role'] ?? '') === 'admin')
                     <a
                         href="{{ route('admin.dashboard') }}"
-                        class="inline-flex items-center justify-center rounded-full bg-[#2b6346] px-5 py-2.5 text-xs font-semibold text-white hover:bg-[#23533a] transition duration-200"
+                        class="inline-flex items-center justify-center rounded-full bg-[#2b6346] px-5 py-2 text-xs font-semibold text-white hover:bg-[#23533a] transition duration-200"
                     >
                         Dashboard Admin
                     </a>
@@ -95,7 +99,7 @@
 
                 <a
                     href="{{ route('logout') }}"
-                    class="inline-flex items-center justify-center rounded-full border border-[#2b6346] px-5 py-2.5 text-xs font-semibold text-[#23533a] hover:bg-[#2b6346] hover:text-white transition duration-200"
+                    class="inline-flex items-center justify-center rounded-full border border-[#2b6346] px-5 py-2 text-xs font-semibold text-[#23533a] hover:bg-[#2b6346] hover:text-white transition duration-200"
                 >
                     Keluar
                 </a>
@@ -103,7 +107,7 @@
                 <a
                     href="{{ route('login') }}"
                     onclick="event.preventDefault(); openAuthModal('login');"
-                    class="inline-flex items-center justify-center rounded-full border border-[#2b6346] px-6 py-2.5 text-xs font-semibold text-[#23533a] hover:bg-[#2b6346] hover:text-white transition duration-200 cursor-pointer"
+                    class="inline-flex items-center justify-center rounded-full border border-[#2b6346] px-6 py-2 text-xs font-semibold text-[#23533a] hover:bg-[#2b6346] hover:text-white transition duration-200 cursor-pointer"
                 >
                     Masuk / Daftar
                 </a>
@@ -111,33 +115,33 @@
         </div>
     </header>
 
-    <!-- Main Split Section -->
+    <!-- Main Split Section (Fits all Windows & Mac desktop screen sizes cleanly) -->
     <main class="flex-1 grid grid-cols-1 lg:grid-cols-12">
         <!-- Left Column: Deep Herbal Green Hero -->
-        <section class="lg:col-span-6 bg-[#2b6346] text-white px-6 sm:px-12 lg:px-14 xl:px-16 py-14 lg:py-20 flex flex-col justify-center">
-            <div class="max-w-[510px]">
+        <section class="lg:col-span-6 bg-[#2b6346] text-white px-6 sm:px-10 lg:px-12 xl:px-16 py-10 lg:py-8 xl:py-12 flex flex-col justify-center">
+            <div class="max-w-[520px] w-full mx-auto lg:mx-0">
                 <!-- Eyebrow -->
-                <p class="text-[11px] font-medium uppercase tracking-[0.08em] text-[#d5e5dc] mb-5">
+                <p class="text-[10.5px] xl:text-[11px] font-medium uppercase tracking-[0.08em] text-[#d5e5dc] mb-3.5 xl:mb-4">
                     DARI AKAR, UNTUK KESEHARIANMU
                 </p>
 
                 <!-- Hero Heading -->
-                <h1 class="font-display text-4xl sm:text-5xl xl:text-[52px] font-bold text-white leading-[1.14] tracking-tight">
+                <h1 class="font-display text-[clamp(2rem,3.4vw,3.25rem)] font-bold text-white leading-[1.14] tracking-tight">
                     Warisan Jamu<br>
                     Nusantara untuk<br>
                     Ritual Sehat Modern
                 </h1>
 
                 <!-- Description -->
-                <p class="text-[#d9e7df] text-sm sm:text-[15px] leading-[1.7] mt-6 max-w-[480px]">
+                <p class="text-[#d9e7df] text-xs sm:text-sm xl:text-[15px] leading-[1.68] mt-4 xl:mt-5 max-w-[480px]">
                     Kami membawa kearifan jamu lebih dekat dengan harimu. Rimpang lokal, racikan jujur, dan kesegaran yang bisa kamu kenali dalam setiap botol.
                 </p>
 
-                <!-- CTA Button: Langsung masuk ke halaman Beranda tanpa perlu login -->
-                <div class="mt-8">
+                <!-- CTA Button: Menuju ke halaman kedua (Introduction) -->
+                <div class="mt-6 xl:mt-7">
                     <a
-                        href="{{ route('beranda') }}"
-                        class="inline-flex items-center gap-3 rounded-full bg-[#e07856] hover:bg-[#cf6846] text-[#1c1917] font-semibold text-[13.5px] px-7 py-3.5 transition duration-200 shadow-xs"
+                        href="{{ route('introduction') }}"
+                        class="inline-flex items-center gap-3 rounded-full bg-[#e07856] hover:bg-[#cf6846] text-[#1c1917] font-semibold text-xs sm:text-[13.5px] px-6 sm:px-7 py-3 xl:py-3.5 transition duration-200 shadow-xs"
                     >
                         <span>Masuk ke Beranda Utama</span>
                         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -148,12 +152,12 @@
                 </div>
 
                 <!-- Divider -->
-                <div class="border-t border-white/20 mt-11 pt-7">
+                <div class="border-t border-white/20 mt-8 xl:mt-10 pt-5 xl:pt-6">
                     <!-- 3 Features Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                         <!-- Feature 1 -->
                         <div>
-                            <div class="text-[#dfece4] mb-2.5">
+                            <div class="text-[#dfece4] mb-2">
                                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M7 20h10"></path>
                                     <path d="M10 20c5.5-2.5.8-6.4 3-10"></path>
@@ -166,7 +170,7 @@
 
                         <!-- Feature 2 -->
                         <div>
-                            <div class="text-[#dfece4] mb-2.5">
+                            <div class="text-[#dfece4] mb-2">
                                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
                                     <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
@@ -177,7 +181,7 @@
 
                         <!-- Feature 3 -->
                         <div>
-                            <div class="text-[#dfece4] mb-2.5">
+                            <div class="text-[#dfece4] mb-2">
                                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
                                     <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
@@ -193,26 +197,49 @@
             </div>
         </section>
 
-        <!-- Right Column: Warm Beige Section (Jamu images omitted/left empty as requested) -->
-        <section class="lg:col-span-6 bg-[#ede5d8] px-6 sm:px-12 lg:px-14 py-12 flex flex-col justify-end">
-            <!-- Bottom Caption Block -->
-            <div class="max-w-md ml-auto lg:mr-8 mb-4">
-                <p class="text-[10.5px] font-bold uppercase tracking-[0.06em] text-[#2b6346]">
-                    SESEDERHANA KEMBALI KE ALAM
-                </p>
-                <h2 class="font-display text-2xl sm:text-[28px] font-medium text-[#2b6346] leading-[1.22] mt-1.5">
-                    Pure Indonesian Roots,<br>
-                    Modern Daily Ritual
-                </h2>
-                <p class="text-xs text-[#7c756b] mt-2.5">
-                    Diracik alami. Dinikmati setiap hari.
-                </p>
+        <!-- Right Column: Warm Beige Section with 7.jpg (Top Large) & 8.jpg (Bottom Small) -->
+        <section class="lg:col-span-6 bg-[#ede5d8] px-6 sm:px-10 lg:px-11 py-6 lg:py-6 xl:py-8 flex flex-col justify-center">
+            <div class="max-w-[590px] w-full mx-auto flex flex-col justify-between gap-4 xl:gap-5">
+                <!-- Top Large Main Image (7.jpg) with responsive viewport-aware height -->
+                <div class="relative w-full h-[260px] sm:h-[320px] lg:h-[clamp(260px,46vh,395px)] rounded-[64px] sm:rounded-[90px] lg:rounded-[110px] overflow-hidden shadow-xs">
+                    <img
+                        src="{{ asset('image/7.jpg') }}"
+                        alt="Warisan Jamu Nusantara TYP Herbal Drink"
+                        class="absolute inset-0 w-full h-full object-cover object-[center_55%]"
+                    >
+                </div>
+
+                <!-- Bottom Row: Secondary Image (8.jpg) & Caption Block -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 lg:gap-6">
+                    <!-- Small Secondary Image (8.jpg) -->
+                    <div class="relative w-full sm:w-[175px] xl:w-[195px] h-[118px] xl:h-[132px] rounded-[18px] overflow-hidden shrink-0 shadow-2xs">
+                        <img
+                            src="{{ asset('image/8.jpg') }}"
+                            alt="Racikan Alami TYP Herbal Drink"
+                            class="absolute inset-0 w-full h-full object-cover object-[center_55%]"
+                        >
+                    </div>
+
+                    <!-- Caption Block -->
+                    <div class="flex-1">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.06em] text-[#2b6346]">
+                            SESEDERHANA KEMBALI KE ALAM
+                        </p>
+                        <h2 class="font-display text-lg sm:text-[22px] xl:text-[25px] font-medium text-[#2b6346] leading-[1.2] mt-1">
+                            Pure Indonesian Roots,<br>
+                            Modern Daily Ritual
+                        </h2>
+                        <p class="text-xs text-[#7c756b] mt-1.5">
+                            Diracik alami. Dinikmati setiap hari.
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
     <!-- Bottom Footer -->
-    <footer class="w-full bg-[#f7f4ee] px-6 sm:px-10 lg:px-12 py-4 border-t border-[#e8e2d7] flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#7d786f]">
+    <footer class="w-full bg-[#f7f4ee] px-6 sm:px-10 lg:px-12 py-3.5 shrink-0 border-t border-[#e8e2d7] flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#7d786f]">
         <div>&copy; 2026 TYP Herbal Drink</div>
         <div>Tradisi yang hidup dalam ritual barumu.</div>
     </footer>

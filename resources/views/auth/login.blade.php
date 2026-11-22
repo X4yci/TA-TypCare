@@ -1,1 +1,1 @@
-@include('welcome', ['authTab' => 'login'])
+@include('pages.welcome', ['authTab' => 'login'])

@@ -31,17 +31,21 @@
     </script>
 
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+        html, body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #faf8f4;
             color: #1e1e1c;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            overflow-x: hidden;
         }
         .font-display {
             font-family: 'Playfair Display', Georgia, serif;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-[#faf8f4] text-[#1e1e1c] antialiased selection:bg-[#2b6346] selection:text-white">
+<body class="min-h-dvh flex flex-col bg-[#faf8f4] text-[#1e1e1c] antialiased selection:bg-[#2b6346] selection:text-white">
 
     @php
         $currentUser = session('auth_user');
@@ -49,24 +53,24 @@
         $shortName = explode(' ', trim($fullName))[0] ?: 'Rinaldi';
     @endphp
 
-    <!-- Main Page Container -->
-    <div class="flex-1 w-full max-w-[1260px] mx-auto px-5 sm:px-8 lg:px-10 pt-5 pb-6 flex flex-col justify-between">
+    <!-- Main Page Container (Fits all Windows & Mac desktop viewports cleanly) -->
+    <div class="flex-1 w-full max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-10 py-4 xl:py-5 flex flex-col justify-between">
         <div>
             <!-- Floating Pill Header Navbar -->
-            <header class="w-full bg-white rounded-full border border-[#ebe6dc] px-6 sm:px-8 py-3 flex items-center justify-between shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+            <header class="w-full bg-white rounded-full border border-[#ebe6dc] px-6 sm:px-8 py-2.5 xl:py-3 flex items-center justify-between shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
                 <!-- Left: Logo from public/image/image.png -->
                 <a href="{{ route('home') }}" class="inline-flex items-center focus:outline-none">
                     <img
                         src="{{ asset('image/image.png') }}"
                         alt="TYP Herbal Drink"
-                        class="h-10 sm:h-12 w-auto object-contain mix-blend-multiply -ml-1"
+                        class="h-10 sm:h-11 xl:h-12 w-auto object-contain mix-blend-multiply -ml-1"
                     >
                 </a>
 
                 <!-- Center: Navigation Links -->
                 <nav class="hidden md:flex items-center gap-1 lg:gap-3 text-xs">
                     <a
-                        href="{{ route('home') }}"
+                        href="{{ route('introduction') }}"
                         class="text-[#5c5953] hover:text-[#1e1e1c] font-medium px-4 py-2 rounded-full transition"
                     >
                         Introduction
@@ -119,12 +123,12 @@
             </header>
 
             <!-- Greeting & Date Section -->
-            <div class="mt-7 flex flex-col sm:flex-row sm:items-end justify-between gap-2 px-1">
+            <div class="mt-5 xl:mt-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2 px-1">
                 <div>
-                    <h1 class="font-display text-2xl sm:text-[32px] font-bold text-[#1e1e1c] tracking-tight leading-tight">
+                    <h1 class="font-display text-2xl sm:text-[28px] xl:text-[32px] font-bold text-[#1e1e1c] tracking-tight leading-tight">
                         Selamat Datang, {{ $shortName }}
                     </h1>
-                    <p class="text-xs text-[#8c867c] mt-1">
+                    <p class="text-xs text-[#8c867c] mt-0.5">
                         {{ $fullName }} · Saatnya memulai ritual baikmu.
                     </p>
                 </div>
@@ -133,34 +137,40 @@
                 </div>
             </div>
 
-            <!-- Main Featured Banner Card (Jamu image on the right omitted/left empty as requested) -->
-            <section class="mt-5 rounded-[24px] overflow-hidden bg-[#e7efe9] border border-[#dce6df] grid grid-cols-1 lg:grid-cols-12 min-h-[250px]">
+            <!-- Main Featured Banner Card (Locked aspect ratio on 9.jpg so bottles are never cropped on any desktop browser) -->
+            <section class="mt-4 rounded-[24px] overflow-hidden bg-[#e7efe9] border border-[#dce6df] flex flex-col lg:flex-row items-stretch">
                 <!-- Left Banner Text -->
-                <div class="lg:col-span-7 p-7 sm:p-10 flex flex-col justify-center">
+                <div class="flex-1 p-6 sm:p-8 xl:p-9 flex flex-col justify-center">
                     <p class="text-[10px] font-bold uppercase tracking-[0.06em] text-[#24583c]">
                         PILIHAN SEGAR MINGGU INI
                     </p>
-                    <h2 class="font-display text-3xl sm:text-[38px] font-bold text-[#245b3e] leading-[1.18] tracking-tight mt-2.5 max-w-[480px]">
+                    <h2 class="font-display text-2xl sm:text-3xl xl:text-[36px] font-bold text-[#245b3e] leading-[1.18] tracking-tight mt-2 max-w-[480px]">
                         Paket Segar Imunitas &amp; Detoks Alami
                     </h2>
-                    <p class="text-xs sm:text-[13.5px] text-[#55695d] mt-3.5">
+                    <p class="text-xs sm:text-[13px] text-[#55695d] mt-3">
                         Dua kebaikan rimpang untuk menemani hari yang penuh energi.
                     </p>
-                    <div class="mt-4 flex items-center gap-2 flex-wrap text-[10.5px]">
+                    <div class="mt-3.5 flex items-center gap-2 flex-wrap text-[10.5px]">
                         <span class="font-bold uppercase tracking-[0.05em] text-[#24583c]">RIMPANG LOKAL</span>
                         <span class="text-[#6e7d73]">&bull; Diperas dingin, diracik sepenuh hati</span>
                     </div>
                 </div>
 
-                <!-- Right Area: Empty container (Gambar jamu dikosongkan sesuai instruksi) -->
-                <div class="lg:col-span-5 min-h-[160px] lg:min-h-full"></div>
+                <!-- Right Area: Gambar 9.jpg with locked proportional width & height across Windows/Mac -->
+                <div class="w-full lg:w-[430px] xl:w-[460px] h-[235px] sm:h-[250px] lg:h-[255px] relative shrink-0 overflow-hidden">
+                    <img
+                        src="{{ asset('image/9.jpg') }}"
+                        alt="Paket Segar Imunitas & Detoks Alami"
+                        class="w-full h-full object-cover object-[50%_66%]"
+                    >
+                </div>
             </section>
 
             <!-- 3 Value Pillars Row -->
-            <section class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5 px-1">
+            <section class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 xl:gap-5 px-1">
                 <!-- Pillar 1 -->
                 <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-full bg-[#eaf1ec] text-[#2b6346] flex items-center justify-center shrink-0">
+                    <div class="w-9 h-9 xl:w-10 xl:h-10 rounded-full bg-[#eaf1ec] text-[#2b6346] flex items-center justify-center shrink-0">
                         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M7 20h10"></path>
                             <path d="M10 20c5.5-2.5.8-6.4 3-10"></path>
@@ -176,7 +186,7 @@
 
                 <!-- Pillar 2 -->
                 <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-full bg-[#eaf1ec] text-[#2b6346] flex items-center justify-center shrink-0">
+                    <div class="w-9 h-9 xl:w-10 xl:h-10 rounded-full bg-[#eaf1ec] text-[#2b6346] flex items-center justify-center shrink-0">
                         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
                             <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
@@ -190,7 +200,7 @@
 
                 <!-- Pillar 3 -->
                 <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-full bg-[#eaf1ec] text-[#2b6346] flex items-center justify-center shrink-0">
+                    <div class="w-9 h-9 xl:w-10 xl:h-10 rounded-full bg-[#eaf1ec] text-[#2b6346] flex items-center justify-center shrink-0">
                         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
                             <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
@@ -207,20 +217,20 @@
             </section>
 
             <!-- Product Section Header -->
-            <section id="products" class="mt-8">
+            <section id="products" class="mt-6 xl:mt-7">
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 px-1">
                     <div>
                         <p class="text-[10px] font-bold uppercase tracking-[0.06em] text-[#24583c]">
                             KEBAIKAN DALAM SETIAP BOTOL
                         </p>
-                        <h2 class="font-display text-2xl sm:text-[30px] font-bold text-[#1e1e1c] tracking-tight leading-tight mt-1">
+                        <h2 class="font-display text-2xl sm:text-[28px] font-bold text-[#1e1e1c] tracking-tight leading-tight mt-0.5">
                             Pilihan dari alam
                         </h2>
                     </div>
                     <div>
                         <a
                             href="{{ route('products') }}"
-                            class="inline-flex items-center gap-2.5 rounded-full bg-[#2b6346] hover:bg-[#23523a] text-white text-xs font-semibold px-6 py-3 transition shadow-xs"
+                            class="inline-flex items-center gap-2.5 rounded-full bg-[#2b6346] hover:bg-[#23523a] text-white text-xs font-semibold px-6 py-2.5 xl:py-3 transition shadow-xs"
                         >
                             <span>Jelajahi Konten Produk</span>
                             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -231,40 +241,74 @@
                     </div>
                 </div>
 
-                <!-- 4 Product Cards Grid (Area gambar jamu dikosongkan sesuai permintaan) -->
-                <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                    @for ($i = 0; $i < 4; $i++)
-                        <div class="bg-white rounded-2xl border border-[#ece7dd] overflow-hidden flex min-h-[136px] shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#d5cfc2] transition">
-                            <!-- Empty Left Image Slot (Dikosongkan tanpa gambar jamu) -->
-                            <div class="w-[42%] shrink-0"></div>
-
-                            <!-- Right Product Details -->
+                <!-- 4 Product Cards Grid -->
+                @php
+                    $suggestedItems = [
+                        [
+                            'name' => 'Temulawak Honey',
+                            'image' => '1.jpeg',
+                            'position' => 'object-[47%_66%]',
+                            'volume' => '250 ml',
+                            'price' => 'Rp 25.000',
+                        ],
+                        [
+                            'name' => 'Kunyit Asam Royal',
+                            'image' => '2.jpeg',
+                            'position' => 'object-[48%_42%]',
+                            'volume' => '250 ml',
+                            'price' => 'Rp 15.000',
+                        ],
+                        [
+                            'name' => 'Beras Kencur Creamy',
+                            'image' => '3.jpeg',
+                            'position' => 'object-[66%_70%]',
+                            'volume' => '250 ml',
+                            'price' => 'Rp 16.000',
+                        ],
+                        [
+                            'name' => 'Kunyit Asam Sirih',
+                            'image' => '6.jpeg',
+                            'position' => 'object-[36%_53%]',
+                            'volume' => '250 ml',
+                            'price' => 'Rp 18.000',
+                        ],
+                    ];
+                @endphp
+                <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    @foreach ($suggestedItems as $item)
+                        <div class="bg-white rounded-2xl border border-[#ece7dd] overflow-hidden flex h-[132px] xl:h-[138px] shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#d5cfc2] transition">
+                            <div class="w-[105px] xl:w-[112px] h-full relative shrink-0 overflow-hidden bg-[#f4efe6]">
+                                <img
+                                    src="{{ asset('image/' . $item['image']) }}"
+                                    alt="{{ $item['name'] }}"
+                                    class="w-full h-full object-cover {{ $item['position'] }}"
+                                >
+                            </div>
                             <div class="flex-1 p-4 flex flex-col justify-center">
-                                <h3 class="font-display text-[17px] font-semibold text-[#1e1e1c] leading-snug">
-                                    Kunyit Asam<br>Royal
+                                <h3 class="font-display text-[16.5px] xl:text-[17px] font-semibold text-[#1e1e1c] leading-snug">
+                                    {{ $item['name'] }}
                                 </h3>
-                                <p class="text-[11px] text-[#9a948a] mt-1">250 ml</p>
-                                <p class="text-xs font-bold text-[#24583c] mt-1.5">Rp 15.000</p>
+                                <p class="text-[11px] text-[#9a948a] mt-1">{{ $item['volume'] }}</p>
+                                <p class="text-xs font-bold text-[#24583c] mt-1.5">{{ $item['price'] }}</p>
                             </div>
                         </div>
-                    @endfor
+                    @endforeach
                 </div>
             </section>
         </div>
 
         <!-- Floating Chat Helper & Bottom Footer -->
-        <div class="mt-10">
-            <!-- Floating "Butuh bantuan? Tanya Sapa" Widget aligned right -->
-            <div class="flex items-center justify-end gap-3 mb-3">
-                <div class="bg-white border border-[#ece7dd] shadow-sm rounded-2xl px-5 py-2.5 text-xs font-semibold text-[#2c2a27]">
+        <div class="mt-6 xl:mt-8">
+            <div class="flex items-center justify-end gap-3 mb-2.5">
+                <div class="bg-white border border-[#ece7dd] shadow-sm rounded-2xl px-5 py-2 text-xs font-semibold text-[#2c2a27]">
                     Butuh bantuan? Tanya Sapa
                 </div>
                 <button
                     type="button"
                     aria-label="Tanya Sapa"
-                    class="w-11 h-11 rounded-full bg-[#2b6346] hover:bg-[#23523a] text-white flex items-center justify-center shadow-md transition cursor-pointer"
+                    class="w-10 h-10 xl:w-11 xl:h-11 rounded-full bg-[#2b6346] hover:bg-[#23523a] text-white flex items-center justify-center shadow-md transition cursor-pointer"
                 >
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-4 h-4 xl:w-5 xl:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         <line x1="9" y1="9" x2="15" y2="9"></line>
                         <line x1="9" y1="13" x2="13" y2="13"></line>
@@ -273,7 +317,7 @@
             </div>
 
             <!-- Footer Bar -->
-            <footer class="pt-4 border-t border-[#e8e2d7] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px]">
+            <footer class="pt-3.5 border-t border-[#e8e2d7] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px]">
                 <div class="text-[#8c867c]">&copy; 2026 TYP Herbal Drink</div>
                 <div class="text-[#8c867c]">Kebaikan rimpang. Ritual yang berkelanjutan.</div>
                 <div class="font-bold uppercase tracking-[0.05em] text-[#24583c]">BERAKAR DI INDONESIA</div>

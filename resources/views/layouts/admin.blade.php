@@ -48,10 +48,14 @@
     </script>
 
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+        html, body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f5f2eb;
             color: #18221b;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            overflow-x: hidden;
         }
         .font-brand {
             font-family: 'Fraunces', Georgia, serif;
@@ -77,7 +81,7 @@
     </style>
     @stack('styles')
 </head>
-<body class="min-h-screen flex bg-[#f5f2eb] text-[#18221b] antialiased selection:bg-[#1f4b31] selection:text-white">
+<body class="min-h-dvh flex bg-[#f5f2eb] text-[#18221b] antialiased selection:bg-[#1f4b31] selection:text-white">
 
     <!-- Sidebar -->
     @include('partials.sidebar')
