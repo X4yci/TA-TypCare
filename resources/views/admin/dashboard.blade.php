@@ -592,6 +592,25 @@
             stock: qty
         });
 
+        // Simpan juga secara langsung ke database SQLite melalui TypCareController
+        const expIso = `${expDateObj.getFullYear()}-${String(expDateObj.getMonth() + 1).padStart(2, '0')}-${String(expDateObj.getDate()).padStart(2, '0')}`;
+        fetch('{{ route("admin.products.save") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                nama_barang: `Jamu ${product} 250ml`,
+                ukuran: '250 ml',
+                harga: 15000,
+                stok: qty,
+                kode_batch: code,
+                tgl_kedaluwarsa: expIso
+            })
+        }).catch(() => {});
+
         qtyInput.value = 0;
         renderBatches();
         updateBatchCodePreview();

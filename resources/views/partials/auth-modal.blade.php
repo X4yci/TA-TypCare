@@ -130,15 +130,15 @@
                         type="email"
                         id="login-email"
                         name="email"
-                        value="{{ old('email', 'rinaldi@gmail.com') }}"
-                        placeholder="rinaldi@gmail.com"
+                        value="{{ old('email', 'admin@typ-herbal.id') }}"
+                        placeholder="admin@typ-herbal.id"
                         oninput="checkLoginEmailRole(this.value)"
                         required
                         class="w-full text-[13px] text-[#2c2a27] placeholder-[#9c968c] focus:outline-none bg-transparent"
                     >
                 </div>
                 <p id="login-role-hint" class="text-[11px] text-[#6e736b] mt-1.5">
-                    Email khusus Pemilik (<code class="text-[#24583c] font-semibold">rinaldi@gmail.com</code> / <code class="text-[#24583c] font-semibold">*@typcare.com</code>) akan masuk ke <strong>Dashboard Admin</strong>.
+                    Email khusus Pemilik (<code class="text-[#24583c] font-semibold">admin@typ-herbal.id</code> / <code class="text-[#24583c] font-semibold">rinaldi@gmail.com</code>) akan masuk ke <strong>Dashboard Admin</strong>.
                 </p>
             </div>
 
@@ -338,8 +338,8 @@
 </div>
 
 <script>
-    const OWNER_EMAILS = ['rinaldi@gmail.com', 'rinaldi@typcare.com', 'admin@typcare.com', 'owner@typcare.com'];
-    const OWNER_DOMAINS = ['@typcare.com', '@admin.typcare.com', '@typcare.id'];
+    const OWNER_EMAILS = ['admin@typ-herbal.id', 'rinaldi@gmail.com', 'rinaldi@typcare.com', 'admin@typcare.com', 'owner@typcare.com'];
+    const OWNER_DOMAINS = ['@typ-herbal.id', '@typcare.com', '@admin.typcare.com', '@typcare.id'];
 
     function isOwnerEmailAddress(email) {
         const clean = (email || '').trim().toLowerCase();

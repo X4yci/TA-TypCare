@@ -1,54 +1,57 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\TypCareController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| 1. Rute Halaman Pembeli & Katalog Publik (Auto-Filter H-3)
+| 1. Rute Halaman Pembeli & Katalog Publik (Terhubung ke SQLite via TypCareController)
 |--------------------------------------------------------------------------
 */
-Route::get('/', [CatalogController::class, 'welcome'])->name('home');
-Route::get('/introduction', [CatalogController::class, 'introduction'])->name('introduction');
-Route::get('/beranda', [CatalogController::class, 'beranda'])->name('beranda');
-Route::get('/home', [CatalogController::class, 'beranda'])->name('user.home');
-Route::get('/products', [CatalogController::class, 'index'])->name('products');
-Route::get('/product', [CatalogController::class, 'index'])->name('product');
+Route::get('/', [TypCareController::class, 'welcome'])->name('home');
+Route::get('/introduction', [TypCareController::class, 'introduction'])->name('introduction');
+Route::get('/beranda', [TypCareController::class, 'beranda'])->name('beranda');
+Route::get('/home', [TypCareController::class, 'beranda'])->name('user.home');
+Route::get('/products', [TypCareController::class, 'catalog'])->name('products');
+Route::get('/product', [TypCareController::class, 'catalog'])->name('product');
 
-// Transaksi Checkout FEFO, Simulasi Pembayaran, & AI Chatbot Konsultasi Jamu
+// Keranjang (Session), Checkout FEFO, Simulasi Pembayaran, & AI Chatbot SQLite Context
+Route::post('/cart/add', [TypCareController::class, 'addToCart'])->name('cart.add');
 Route::post('/orders/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
 Route::post('/payments/{pesananId}/simulate', [PaymentController::class, 'simulasiBayar'])->name('payments.simulate');
-Route::post('/chatbot/konsultasi', [ChatbotController::class, 'konsultasi'])->name('chatbot.konsultasi');
+Route::post('/chatbot/konsultasi', [TypCareController::class, 'chatbot'])->name('chatbot.konsultasi');
 
 /*
 |--------------------------------------------------------------------------
-| 2. Rute Autentikasi & Kontrol Sesi Role (Pembeli vs Pemilik/Admin)
+| 2. Rute Autentikasi & Kontrol Sesi Role (SQLite Model Admin & Customer)
 |--------------------------------------------------------------------------
 */
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+Route::post('/login', [TypCareController::class, 'login'])->name('login.submit');
 Route::match(['get', 'post'], '/login/google', [AuthController::class, 'loginGoogle'])->name('login.google');
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+Route::post('/register', [TypCareController::class, 'register'])->name('register.submit');
 
 Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| 3. Rute Backoffice Pemilik / Admin (Validasi Email Khusus Pemilik)
+| 3. Rute Backoffice Pemilik / Admin (CRUD Data Barang SQLite)
 |--------------------------------------------------------------------------
 */
-Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
-Route::get('/admin/dashboard', [AuthController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/dashboard', [TypCareController::class, 'dashboard'])->name('dashboard');
+Route::get('/admin/dashboard', [TypCareController::class, 'dashboard'])->name('admin.dashboard');
+
+Route::post('/admin/products/save', [TypCareController::class, 'storeOrUpdateProduct'])->name('admin.products.save');
+Route::delete('/admin/products/{id}', [TypCareController::class, 'deleteProduct'])->name('admin.products.delete');
 
 Route::post('/admin/inventory/batch', [InventoryController::class, 'storeBatch'])->name('admin.inventory.store');
 Route::post('/admin/products', [ProductController::class, 'store'])->name('admin.products.store');
