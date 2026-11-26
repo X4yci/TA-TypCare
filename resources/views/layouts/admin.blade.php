@@ -98,7 +98,9 @@
             </div>
 
             <!-- Footer -->
-            @include('partials.footer')
+            @unless (View::hasSection('hide_footer'))
+                @include('partials.footer')
+            @endunless
         </main>
     </div>
 

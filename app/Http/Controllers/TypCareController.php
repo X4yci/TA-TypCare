@@ -263,6 +263,57 @@ class TypCareController extends Controller
     }
 
     /**
+     * Tampilkan halaman Admin: Produk & data AI.
+     */
+    public function adminProducts(Request $request)
+    {
+        $user = $request->session()->get('auth_user');
+
+        if ($user && (($user['role'] ?? '') === 'user' || ! self::isAdminEmail($user['email'] ?? ''))) {
+            return redirect()->route('login')
+                ->withErrors([
+                    'email' => 'Akses ditolak! Gunakan email khusus Pemilik/Admin untuk membuka halaman Produk & Data AI.',
+                ]);
+        }
+
+        return view('admin.products');
+    }
+
+    /**
+     * Tampilkan halaman Admin: Pesanan & tracking.
+     */
+    public function adminOrders(Request $request)
+    {
+        $user = $request->session()->get('auth_user');
+
+        if ($user && (($user['role'] ?? '') === 'user' || ! self::isAdminEmail($user['email'] ?? ''))) {
+            return redirect()->route('login')
+                ->withErrors([
+                    'email' => 'Akses ditolak! Gunakan email khusus Pemilik/Admin untuk membuka halaman Pesanan & Tracking.',
+                ]);
+        }
+
+        return view('admin.orders');
+    }
+
+    /**
+     * Tampilkan halaman Admin: Laporan penjualan.
+     */
+    public function adminReports(Request $request)
+    {
+        $user = $request->session()->get('auth_user');
+
+        if ($user && (($user['role'] ?? '') === 'user' || ! self::isAdminEmail($user['email'] ?? ''))) {
+            return redirect()->route('login')
+                ->withErrors([
+                    'email' => 'Akses ditolak! Gunakan email khusus Pemilik/Admin untuk membuka halaman Laporan Penjualan.',
+                ]);
+        }
+
+        return view('admin.reports');
+    }
+
+    /**
      * CRUD Admin: Tambah atau Perbarui Data Barang / Batch Produksi ke tabel products di SQLite.
      */
     public function storeOrUpdateProduct(Request $request): JsonResponse

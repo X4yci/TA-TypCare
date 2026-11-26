@@ -14,12 +14,18 @@
         </div>
 
         <!-- Workspace Navigation -->
+        @php
+            $isProductAiPage = request()->routeIs('admin.products*') || request()->routeIs('admin.produk*');
+            $isOrdersPage = request()->routeIs('admin.orders*') || request()->routeIs('admin.pesanan*');
+            $isReportsPage = request()->routeIs('admin.reports*') || request()->routeIs('admin.laporan*');
+            $isDashboardPage = ! $isProductAiPage && ! $isOrdersPage && ! $isReportsPage;
+        @endphp
         <div class="px-3.5 pt-5">
             <p class="px-2.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#7fa68e] mb-2.5">RUANG KERJA</p>
             <nav class="space-y-1">
-                <!-- Active: Dashboard & stok FEFO -->
-                <a href="{{ url('/dashboard') }}" class="bg-white/[0.13] text-white font-semibold rounded-lg px-3 py-2.5 text-[13px] flex items-center gap-3 shadow-2xs">
-                    <svg class="w-4 h-4 text-[#95e2b2] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Dashboard & stok FEFO -->
+                <a href="{{ route('admin.dashboard') }}" class="{{ $isDashboardPage ? 'bg-white/[0.13] text-white font-semibold shadow-2xs' : 'text-[#c8ddd0] hover:bg-white/[0.06] hover:text-white font-medium' }} rounded-lg px-3 py-2.5 text-[13px] flex items-center gap-3 transition">
+                    <svg class="w-4 h-4 {{ $isDashboardPage ? 'text-[#95e2b2]' : 'text-[#9abca7]' }} shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
                         <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
                         <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
@@ -29,8 +35,8 @@
                 </a>
 
                 <!-- Produk & data AI -->
-                <a href="#produk" class="text-[#c8ddd0] hover:bg-white/[0.06] hover:text-white font-medium rounded-lg px-3 py-2.5 text-[13px] flex items-center gap-3 transition">
-                    <svg class="w-4 h-4 text-[#9abca7] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <a href="{{ route('admin.products') }}" class="{{ $isProductAiPage ? 'bg-white/[0.13] text-white font-semibold shadow-2xs' : 'text-[#c8ddd0] hover:bg-white/[0.06] hover:text-white font-medium' }} rounded-lg px-3 py-2.5 text-[13px] flex items-center gap-3 transition">
+                    <svg class="w-4 h-4 {{ $isProductAiPage ? 'text-[#95e2b2]' : 'text-[#9abca7]' }} shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                         <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                         <line x1="12" y1="22.08" x2="12" y2="12"></line>
@@ -39,8 +45,8 @@
                 </a>
 
                 <!-- Pesanan & tracking -->
-                <a href="#pesanan" class="text-[#c8ddd0] hover:bg-white/[0.06] hover:text-white font-medium rounded-lg px-3 py-2.5 text-[13px] flex items-center gap-3 transition">
-                    <svg class="w-4 h-4 text-[#9abca7] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <a href="{{ route('admin.orders') }}" class="{{ $isOrdersPage ? 'bg-white/[0.13] text-white font-semibold shadow-2xs' : 'text-[#c8ddd0] hover:bg-white/[0.06] hover:text-white font-medium' }} rounded-lg px-3 py-2.5 text-[13px] flex items-center gap-3 transition">
+                    <svg class="w-4 h-4 {{ $isOrdersPage ? 'text-[#95e2b2]' : 'text-[#9abca7]' }} shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -49,8 +55,8 @@
                 </a>
 
                 <!-- Laporan penjualan -->
-                <a href="#laporan" class="text-[#c8ddd0] hover:bg-white/[0.06] hover:text-white font-medium rounded-lg px-3 py-2.5 text-[13px] flex items-center gap-3 transition">
-                    <svg class="w-4 h-4 text-[#9abca7] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <a href="{{ route('admin.reports') }}" class="{{ $isReportsPage ? 'bg-white/[0.13] text-white font-semibold shadow-2xs' : 'text-[#c8ddd0] hover:bg-white/[0.06] hover:text-white font-medium' }} rounded-lg px-3 py-2.5 text-[13px] flex items-center gap-3 transition">
+                    <svg class="w-4 h-4 {{ $isReportsPage ? 'text-[#95e2b2]' : 'text-[#9abca7]' }} shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                         <polyline points="14 2 14 8 20 8"></polyline>
                         <line x1="16" y1="13" x2="8" y2="13"></line>

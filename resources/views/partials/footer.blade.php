@@ -11,14 +11,14 @@
             </span>
             <span class="text-[#6e736b] sm:ml-2">Stok dengan masa simpan &le; 3 hari terkunci otomatis.</span>
         </div>
-        <div class="text-[#7a7f76]">
-            Data demo · 12 Nov 2026, 09.41 WIB
+        <div id="realtime-footer-timestamp" class="text-[#7a7f76]">
+            Data real-time · {{ now()->timezone('Asia/Jakarta')->format('d M Y, H.i.s') }} WIB
         </div>
     </div>
 
     <!-- Bottom Footer Credits -->
     <div class="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-[#8c9188]">
-        <div class="tracking-wide">TYP-Care / UMKM TYP HERBAL DRINK</div>
+        <div class="tracking-wide">TYP-Care / UMKM TYP HERBAL DRINK &copy; {{ now()->year }}</div>
         <div>Operasional yang rapi, kualitas yang terjaga.</div>
     </div>
 </footer>

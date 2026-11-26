@@ -11,7 +11,7 @@
             <p class="text-[13.5px] text-[#6e736b] mt-1">Pantau pesanan, catat produksi, dan jaga kualitas stok jamu Anda.</p>
         </div>
         <div>
-            <a href="#pesanan" class="bg-[#d86b43] hover:bg-[#c35b35] text-white font-semibold text-[13px] px-4 py-2.5 rounded-lg inline-flex items-center gap-2.5 shadow-2xs transition">
+            <a href="{{ route('admin.orders') }}" class="bg-[#d86b43] hover:bg-[#c35b35] text-white font-semibold text-[13px] px-4 py-2.5 rounded-lg inline-flex items-center gap-2.5 shadow-2xs transition">
                 <span>Lihat pesanan</span>
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -151,7 +151,7 @@
                         >
                     </div>
 
-                    <!-- Tanggal Produksi & Kedaluwarsa -->
+                    <!-- Tanggal Produksi & Kedaluwarsa (Real-Time Validated) -->
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label for="prod-date" class="block text-xs font-semibold text-[#4a4f47] mb-1.5">Tanggal produksi</label>
@@ -159,8 +159,9 @@
                                 <input
                                     type="text"
                                     id="prod-date"
-                                    value="12/11/2026"
+                                    value="{{ now()->timezone('Asia/Jakarta')->format('d/m/Y') }}"
                                     placeholder="DD/MM/YYYY"
+                                    oninput="validateRealtimeDates()"
                                     class="w-full bg-white border border-[#dedad0] rounded-lg pl-3 pr-8 py-2 text-[13px] text-[#18221b] focus:outline-none focus:border-[#1f4b31]"
                                 >
                                 <svg class="w-3.5 h-3.5 text-[#6e736b] absolute right-2.5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -178,8 +179,9 @@
                                 <input
                                     type="text"
                                     id="exp-date"
-                                    value="26/11/2026"
+                                    value="{{ now()->timezone('Asia/Jakarta')->addDays(14)->format('d/m/Y') }}"
                                     placeholder="DD/MM/YYYY"
+                                    oninput="validateRealtimeDates()"
                                     class="w-full bg-white border border-[#dedad0] rounded-lg pl-3 pr-8 py-2 text-[13px] text-[#18221b] focus:outline-none focus:border-[#1f4b31]"
                                 >
                                 <svg class="w-3.5 h-3.5 text-[#6e736b] absolute right-2.5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -191,6 +193,7 @@
                             </div>
                         </div>
                     </div>
+                    <p id="date-validation-msg" class="hidden text-[11px] font-medium text-[#c53030]"></p>
 
                     <!-- Jumlah Produksi -->
                     <div>
@@ -382,42 +385,78 @@
 
 @push('scripts')
 <script>
-    const INITIAL_BATCHES = [
-        {
-            product: 'Kunyit Asam',
-            code: 'BATCH-KA-20261107-01',
-            prodDateDisplay: '07 Nov 26',
-            expDateDisplay: '14 Nov 26',
-            daysLeft: 2,
-            stock: 6
-        },
-        {
-            product: 'Beras Kencur',
-            code: 'BATCH-BK-20261111-01',
-            prodDateDisplay: '11 Nov 26',
-            expDateDisplay: '18 Nov 26',
-            daysLeft: 6,
-            stock: 8
-        },
-        {
-            product: 'Kunyit Asam',
-            code: 'BATCH-KA-20261112-02',
-            prodDateDisplay: '12 Nov 26',
-            expDateDisplay: '23 Nov 26',
-            daysLeft: 11,
-            stock: 10
-        },
-        {
-            product: 'Jahe Merah',
-            code: 'BATCH-JM-20261112-01',
-            prodDateDisplay: '12 Nov 26',
-            expDateDisplay: '26 Nov 26',
-            daysLeft: 14,
-            stock: 16
-        }
-    ];
+    const MONTHS_SHORT_ID = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
-    let batches = JSON.parse(JSON.stringify(INITIAL_BATCHES));
+    function addDaysToDate(baseDate, days) {
+        const d = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+        d.setDate(d.getDate() + days);
+        return d;
+    }
+
+    function formatShortDate(dateObj) {
+        const d = String(dateObj.getDate()).padStart(2, '0');
+        const m = MONTHS_SHORT_ID[dateObj.getMonth()] || 'Nov';
+        const y = String(dateObj.getFullYear()).slice(-2);
+        return `${d} ${m} ${y}`;
+    }
+
+    function formatSlashDate(dateObj) {
+        const d = String(dateObj.getDate()).padStart(2, '0');
+        const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const y = dateObj.getFullYear();
+        return `${d}/${m}/${y}`;
+    }
+
+    function formatCompactYmd(dateObj) {
+        const y = dateObj.getFullYear();
+        const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const d = String(dateObj.getDate()).padStart(2, '0');
+        return `${y}${m}${d}`;
+    }
+
+    function buildRealtimeInitialBatches() {
+        const today = new Date();
+        const ymdToday = formatCompactYmd(today);
+        const ymdMinus1 = formatCompactYmd(addDaysToDate(today, -1));
+        const ymdMinus5 = formatCompactYmd(addDaysToDate(today, -5));
+
+        return [
+            {
+                product: 'Kunyit Asam',
+                code: `BATCH-KA-${ymdMinus5}-01`,
+                prodDateDisplay: formatShortDate(addDaysToDate(today, -5)),
+                expDateDisplay: formatShortDate(addDaysToDate(today, 2)),
+                daysLeft: 2,
+                stock: 6
+            },
+            {
+                product: 'Beras Kencur',
+                code: `BATCH-BK-${ymdMinus1}-01`,
+                prodDateDisplay: formatShortDate(addDaysToDate(today, -1)),
+                expDateDisplay: formatShortDate(addDaysToDate(today, 6)),
+                daysLeft: 6,
+                stock: 8
+            },
+            {
+                product: 'Kunyit Asam',
+                code: `BATCH-KA-${ymdToday}-02`,
+                prodDateDisplay: formatShortDate(today),
+                expDateDisplay: formatShortDate(addDaysToDate(today, 11)),
+                daysLeft: 11,
+                stock: 10
+            },
+            {
+                product: 'Jahe Merah',
+                code: `BATCH-JM-${ymdToday}-01`,
+                prodDateDisplay: formatShortDate(today),
+                expDateDisplay: formatShortDate(addDaysToDate(today, 14)),
+                daysLeft: 14,
+                stock: 16
+            }
+        ];
+    }
+
+    let batches = buildRealtimeInitialBatches();
     let currentFilter = 'all';
 
     function toggleMobileSidebar() {
@@ -427,30 +466,76 @@
         backdrop.classList.toggle('hidden');
     }
 
+    // Validasi ketat tanggal, bulan (1-12), dan tahun (termasuk kabisat) secara real-time
+    function parseSlashDate(dateStr) {
+        if (!dateStr) return null;
+        const parts = dateStr.trim().split('/');
+        if (parts.length !== 3) return null;
+
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10);
+        const year = parseInt(parts[2], 10);
+
+        if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+        if (year < 2020 || year > 2100 || month < 1 || month > 12 || day < 1 || day > 31) return null;
+
+        const dateObj = new Date(year, month - 1, day);
+        // Pastikan tanggal tidak melompat bulan (misal 31/02 atau 31/11 tidak valid)
+        if (
+            dateObj.getFullYear() !== year ||
+            dateObj.getMonth() !== month - 1 ||
+            dateObj.getDate() !== day
+        ) {
+            return null;
+        }
+        return dateObj;
+    }
+
     function updateBatchCodePreview() {
         const select = document.getElementById('product-variant');
         const selectedOption = select.options[select.selectedIndex];
         const prefix = selectedOption.getAttribute('data-prefix') || 'KA';
-        const existingForPrefix = batches.filter(b => b.code.includes(`BATCH-${prefix}-20261112`)).length;
+        const prodDateObj = parseSlashDate(document.getElementById('prod-date')?.value) || new Date();
+        const ymd = formatCompactYmd(prodDateObj);
+        const existingForPrefix = batches.filter(b => b.code.includes(`BATCH-${prefix}-${ymd}`)).length;
         const seq = String(existingForPrefix + 1).padStart(2, '0');
-        document.getElementById('batch-code').value = `BATCH-${prefix}-20261112-${seq}`;
+        document.getElementById('batch-code').value = `BATCH-${prefix}-${ymd}-${seq}`;
     }
 
-    function parseSlashDate(dateStr) {
-        const parts = dateStr.trim().split('/');
-        if (parts.length !== 3) return null;
-        const day = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10) - 1;
-        const year = parseInt(parts[2], 10);
-        return new Date(year, month, day);
-    }
+    function validateRealtimeDates() {
+        const prodInput = document.getElementById('prod-date');
+        const expInput = document.getElementById('exp-date');
+        const msgEl = document.getElementById('date-validation-msg');
 
-    function formatShortDate(dateObj) {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-        const d = String(dateObj.getDate()).padStart(2, '0');
-        const m = months[dateObj.getMonth()] || 'Nov';
-        const y = String(dateObj.getFullYear()).slice(-2);
-        return `${d} ${m} ${y}`;
+        const prodObj = parseSlashDate(prodInput.value);
+        const expObj = parseSlashDate(expInput.value);
+
+        if (!prodObj) {
+            msgEl.textContent = 'Format Tanggal Produksi tidak valid (gunakan DD/MM/YYYY dengan tanggal, bulan 01-12, & tahun yang benar).';
+            msgEl.classList.remove('hidden');
+            prodInput.classList.add('border-[#c53030]');
+            return false;
+        }
+        prodInput.classList.remove('border-[#c53030]');
+
+        if (!expObj) {
+            msgEl.textContent = 'Format Tanggal Kedaluwarsa tidak valid (gunakan DD/MM/YYYY dengan tanggal, bulan 01-12, & tahun yang benar).';
+            msgEl.classList.remove('hidden');
+            expInput.classList.add('border-[#c53030]');
+            return false;
+        }
+
+        if (expObj <= prodObj) {
+            msgEl.textContent = 'Tanggal Kedaluwarsa harus lebih besar dari Tanggal Produksi.';
+            msgEl.classList.remove('hidden');
+            expInput.classList.add('border-[#c53030]');
+            return false;
+        }
+
+        expInput.classList.remove('border-[#c53030]');
+        msgEl.classList.add('hidden');
+        updateBatchCodePreview();
+        return true;
     }
 
     function filterBatches(filter) {
@@ -565,6 +650,10 @@
 
     function handleAddBatch(event) {
         event.preventDefault();
+        if (!validateRealtimeDates()) {
+            return;
+        }
+
         const select = document.getElementById('product-variant');
         const product = select.value;
         const code = document.getElementById('batch-code').value;
@@ -578,9 +667,11 @@
             return;
         }
 
-        const refDate = new Date(2026, 10, 12); // 12 Nov 2026 demo reference date
+        // Hitung sisa hari secara real-time terhadap tanggal hari ini
+        const now = new Date();
+        const refDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const prodDateObj = parseSlashDate(prodDateStr) || refDate;
-        const expDateObj = parseSlashDate(expDateStr) || new Date(2026, 10, 26);
+        const expDateObj = parseSlashDate(expDateStr) || addDaysToDate(refDate, 14);
         const diffDays = Math.max(0, Math.round((expDateObj - refDate) / (1000 * 60 * 60 * 24)));
 
         batches.push({
@@ -592,7 +683,7 @@
             stock: qty
         });
 
-        // Simpan juga secara langsung ke database SQLite melalui TypCareController
+        // Simpan juga secara langsung ke database melalui TypCareController
         const expIso = `${expDateObj.getFullYear()}-${String(expDateObj.getMonth() + 1).padStart(2, '0')}-${String(expDateObj.getDate()).padStart(2, '0')}`;
         fetch('{{ route("admin.products.save") }}', {
             method: 'POST',
@@ -617,13 +708,22 @@
     }
 
     function resetDemoData() {
-        batches = JSON.parse(JSON.stringify(INITIAL_BATCHES));
+        const today = new Date();
+        batches = buildRealtimeInitialBatches();
         document.getElementById('product-variant').selectedIndex = 0;
-        document.getElementById('batch-code').value = 'BATCH-KA-20261112-01';
-        document.getElementById('prod-date').value = '12/11/2026';
-        document.getElementById('exp-date').value = '26/11/2026';
+        document.getElementById('prod-date').value = formatSlashDate(today);
+        document.getElementById('exp-date').value = formatSlashDate(addDaysToDate(today, 14));
         document.getElementById('prod-qty').value = '0';
+        validateRealtimeDates();
         filterBatches('all');
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date();
+        document.getElementById('prod-date').value = formatSlashDate(today);
+        document.getElementById('exp-date').value = formatSlashDate(addDaysToDate(today, 14));
+        updateBatchCodePreview();
+        renderBatches();
+    });
 </script>
 @endpush

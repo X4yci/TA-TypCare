@@ -132,8 +132,8 @@
                         {{ $fullName }} · Saatnya memulai ritual baikmu.
                     </p>
                 </div>
-                <div class="text-[10.5px] font-bold uppercase tracking-[0.06em] text-[#2b6346]">
-                    SENIN, 26 OKTOBER 2026
+                <div id="beranda-realtime-date" class="text-[10.5px] font-bold uppercase tracking-[0.06em] text-[#2b6346]">
+                    {{ strtoupper(now()->timezone('Asia/Jakarta')->translatedFormat('l, d F Y')) }} &bull; {{ now()->timezone('Asia/Jakarta')->format('H:i:s') }} WIB
                 </div>
             </div>
 
@@ -318,12 +318,41 @@
 
             <!-- Footer Bar -->
             <footer class="pt-3.5 border-t border-[#e8e2d7] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px]">
-                <div class="text-[#8c867c]">&copy; 2026 TYP Herbal Drink</div>
+                <div class="text-[#8c867c]">&copy; <span id="beranda-realtime-year">{{ now()->year }}</span> TYP Herbal Drink</div>
                 <div class="text-[#8c867c]">Kebaikan rimpang. Ritual yang berkelanjutan.</div>
                 <div class="font-bold uppercase tracking-[0.05em] text-[#24583c]">BERAKAR DI INDONESIA</div>
             </footer>
         </div>
     </div>
 
+    <script>
+        (function initBerandaRealtimeClock() {
+            const HARI = ['MINGGU', 'SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU'];
+            const BULAN = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+
+            function tick() {
+                const now = new Date();
+                const hari = HARI[now.getDay()];
+                const tgl = String(now.getDate()).padStart(2, '0');
+                const bln = BULAN[now.getMonth()];
+                const thn = now.getFullYear();
+                const jam = String(now.getHours()).padStart(2, '0');
+                const mnt = String(now.getMinutes()).padStart(2, '0');
+                const dtk = String(now.getSeconds()).padStart(2, '0');
+
+                const el = document.getElementById('beranda-realtime-date');
+                if (el) {
+                    el.textContent = `${hari}, ${tgl} ${bln} ${thn} • ${jam}:${mnt}:${dtk} WIB`;
+                }
+                const yr = document.getElementById('beranda-realtime-year');
+                if (yr) {
+                    yr.textContent = String(thn);
+                }
+            }
+
+            tick();
+            setInterval(tick, 1000);
+        })();
+    </script>
 </body>
 </html>

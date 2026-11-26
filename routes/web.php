@@ -49,6 +49,12 @@ Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->nam
 */
 Route::get('/dashboard', [TypCareController::class, 'dashboard'])->name('dashboard');
 Route::get('/admin/dashboard', [TypCareController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin/products', [TypCareController::class, 'adminProducts'])->name('admin.products');
+Route::get('/admin/produk', [TypCareController::class, 'adminProducts'])->name('admin.produk');
+Route::get('/admin/orders', [TypCareController::class, 'adminOrders'])->name('admin.orders');
+Route::get('/admin/pesanan', [TypCareController::class, 'adminOrders'])->name('admin.pesanan');
+Route::get('/admin/reports', [TypCareController::class, 'adminReports'])->name('admin.reports');
+Route::get('/admin/laporan', [TypCareController::class, 'adminReports'])->name('admin.laporan');
 
 Route::post('/admin/products/save', [TypCareController::class, 'storeOrUpdateProduct'])->name('admin.products.save');
 Route::delete('/admin/products/{id}', [TypCareController::class, 'deleteProduct'])->name('admin.products.delete');

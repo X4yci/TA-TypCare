@@ -16,16 +16,21 @@
         </nav>
     </div>
 
-    <!-- Right: Date Badge & Notification Bell -->
+    <!-- Right: Real-Time Date & Clock Badge + Notification Bell -->
     <div class="flex items-center gap-3">
-        <div class="bg-white/[0.08] border border-white/[0.12] rounded-lg px-3.5 py-1.5 sm:min-w-[235px] flex items-center gap-2.5 text-xs text-[#e5f0e9]">
-            <svg class="w-3.5 h-3.5 text-[#9ec4ad] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <span class="font-medium">Kamis, 12 November 2026</span>
+        <div class="bg-white/[0.08] border border-white/[0.12] rounded-lg px-3.5 py-1.5 sm:min-w-[265px] flex items-center justify-between gap-2.5 text-xs text-[#e5f0e9]">
+            <div class="flex items-center gap-2">
+                <svg class="w-3.5 h-3.5 text-[#9ec4ad] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span id="realtime-navbar-date" class="font-medium">{{ now()->timezone('Asia/Jakarta')->translatedFormat('l, d F Y') }}</span>
+            </div>
+            <span id="realtime-navbar-clock" class="font-mono-code text-[11px] text-[#95e2b2] font-semibold pl-2 border-l border-white/15">
+                {{ now()->timezone('Asia/Jakarta')->format('H:i:s') }} WIB
+            </span>
         </div>
 
         <button type="button" aria-label="Notifikasi" class="p-1.5 rounded-lg text-[#d5e6dc] hover:text-white hover:bg-white/10 transition cursor-pointer">
@@ -36,3 +41,42 @@
         </button>
     </div>
 </header>
+
+<script>
+    (function initAdminRealtimeClock() {
+        const HARI_ID = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const BULAN_PANJANG_ID = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        const BULAN_PENDEK_ID = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+        function updateClocks() {
+            const now = new Date();
+            const hari = HARI_ID[now.getDay()];
+            const tgl = String(now.getDate()).padStart(2, '0');
+            const blnPanjang = BULAN_PANJANG_ID[now.getMonth()];
+            const blnPendek = BULAN_PENDEK_ID[now.getMonth()];
+            const thn = now.getFullYear();
+
+            const jam = String(now.getHours()).padStart(2, '0');
+            const mnt = String(now.getMinutes()).padStart(2, '0');
+            const dtk = String(now.getSeconds()).padStart(2, '0');
+
+            const navDateEl = document.getElementById('realtime-navbar-date');
+            if (navDateEl) {
+                navDateEl.textContent = `${hari}, ${tgl} ${blnPanjang} ${thn}`;
+            }
+
+            const navClockEl = document.getElementById('realtime-navbar-clock');
+            if (navClockEl) {
+                navClockEl.textContent = `${jam}:${mnt}:${dtk} WIB`;
+            }
+
+            const footerTimeEl = document.getElementById('realtime-footer-timestamp');
+            if (footerTimeEl) {
+                footerTimeEl.textContent = `Data real-time · ${tgl} ${blnPendek} ${thn}, ${jam}.${mnt}.${dtk} WIB`;
+            }
+        }
+
+        updateClocks();
+        setInterval(updateClocks, 1000);
+    })();
+</script>
